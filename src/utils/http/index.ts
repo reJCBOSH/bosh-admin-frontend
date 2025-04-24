@@ -189,6 +189,38 @@ class PureHttp {
   ): Promise<T> {
     return this.request<T>("get", url, params, config);
   }
+
+  // 简易GET请求工具函数
+  public GET<T>(url: string, params?: any): Promise<T> {
+    return new Promise((resolve, reject) => {
+      PureHttp.axiosInstance
+        .get(url, { params })
+        .then((response: undefined) => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  // 简易POST请求工具函数
+  public POST<T>(
+    url: string,
+    data?: any,
+    config?: PureHttpRequestConfig
+  ): Promise<T> {
+    return new Promise((resolve, reject) => {
+      PureHttp.axiosInstance
+        .post(url, data, config)
+        .then((response: undefined) => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
 }
 
 export const http = new PureHttp();
