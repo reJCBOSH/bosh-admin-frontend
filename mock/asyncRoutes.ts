@@ -6,51 +6,50 @@ import { defineFakeRoute } from "vite-plugin-fake-server/client";
  * admin：管理员角色
  * common：普通角色
  */
-const permissionRouter = {
-  path: "/permission",
+
+const systemManagementRouter = {
+  path: "/system",
   meta: {
-    title: "权限管理",
-    icon: "ep:lollipop",
-    rank: 10
+    icon: "ri:settings-3-line",
+    title: "系统管理",
+    rank: 14
   },
   children: [
     {
-      path: "/permission/page/index",
-      name: "PermissionPage",
+      path: "/system/user/index",
+      name: "SystemUser",
       meta: {
-        title: "页面权限",
-        roles: ["admin", "common"]
+        icon: "ri:admin-line",
+        title: "用户管理",
+        roles: ["admin"]
       }
     },
     {
-      path: "/permission/button",
+      path: "/system/role/index",
+      name: "SystemRole",
       meta: {
-        title: "按钮权限",
-        roles: ["admin", "common"]
-      },
-      children: [
-        {
-          path: "/permission/button/router",
-          component: "permission/button/index",
-          name: "PermissionButtonRouter",
-          meta: {
-            title: "路由返回按钮权限",
-            auths: [
-              "permission:btn:add",
-              "permission:btn:edit",
-              "permission:btn:delete"
-            ]
-          }
-        },
-        {
-          path: "/permission/button/login",
-          component: "permission/button/perms",
-          name: "PermissionButtonLogin",
-          meta: {
-            title: "登录接口返回按钮权限"
-          }
-        }
-      ]
+        icon: "ri:admin-fill",
+        title: "角色管理",
+        roles: ["admin"]
+      }
+    },
+    {
+      path: "/system/menu/index",
+      name: "SystemMenu",
+      meta: {
+        icon: "ep:menu",
+        title: "菜单管理",
+        roles: ["admin"]
+      }
+    },
+    {
+      path: "/system/dept/index",
+      name: "SystemDept",
+      meta: {
+        icon: "ri:git-branch-line",
+        title: "部门管理",
+        roles: ["admin"]
+      }
     }
   ]
 };
@@ -62,7 +61,7 @@ export default defineFakeRoute([
     response: () => {
       return {
         success: true,
-        data: [permissionRouter]
+        data: [systemManagementRouter]
       };
     }
   }
