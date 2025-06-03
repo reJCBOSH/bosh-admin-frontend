@@ -11,10 +11,8 @@ importers:
       '@pureadmin/descriptions':
         specifier: ^1.2.1
         version: 1.2.1(echarts@5.6.0)(element-plus@2.9.11(vue@3.5.16(typescript@5.8.3)))(typescript@5.8.3)
-        version: 1.2.1(echarts@5.6.0)(element-plus@2.9.11(vue@3.5.16(typescript@5.8.3)))(typescript@5.8.3)
       '@pureadmin/table':
         specifier: ^3.2.1
-        version: 3.2.1(element-plus@2.9.11(vue@3.5.16(typescript@5.8.3)))(typescript@5.8.3)
         version: 3.2.1(element-plus@2.9.11(vue@3.5.16(typescript@5.8.3)))(typescript@5.8.3)
       '@pureadmin/utils':
         specifier: ^2.6.0
