@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@pureadmin/descriptions':
         specifier: ^1.2.1
-        version: 1.2.1(echarts@5.6.0)(element-plus@2.9.9(vue@3.5.13(typescript@5.8.3)))(typescript@5.8.3)
+        version: 1.2.1(element-plus@2.9.9(vue@3.5.13(typescript@5.8.3)))(typescript@5.8.3)
       '@pureadmin/table':
         specifier: ^3.2.1
         version: 3.2.1(element-plus@2.9.9(vue@3.5.13(typescript@5.8.3)))(typescript@5.8.3)
@@ -71,6 +71,9 @@ importers:
       sortablejs:
         specifier: ^1.15.6
         version: 1.15.6
+      stylelint-config-standard:
+        specifier: ^38.0.0
+        version: 38.0.0(stylelint@16.19.1(typescript@5.8.3))
       typeit:
         specifier: ^8.8.7
         version: 8.8.7
@@ -3571,6 +3574,12 @@ packages:
     peerDependencies:
       stylelint: ^16.1.0
 
+  stylelint-config-standard@38.0.0:
+    resolution: {integrity: sha512-uj3JIX+dpFseqd/DJx8Gy3PcRAJhlEZ2IrlFOc4LUxBX/PNMEQ198x7LCOE2Q5oT9Vw8nyc4CIL78xSqPr6iag==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      stylelint: ^16.18.0
+
   stylelint-order@6.0.4:
     resolution: {integrity: sha512-0UuKo4+s1hgQ/uAxlYU4h0o0HS4NiQDud0NAUNI0aa8FJdmYHA5ZZTFHiV5FpmE3071e9pZx5j0QpVJW5zOCUA==}
     peerDependencies:
@@ -4697,14 +4706,13 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
-  '@pureadmin/descriptions@1.2.1(echarts@5.6.0)(element-plus@2.9.9(vue@3.5.13(typescript@5.8.3)))(typescript@5.8.3)':
+  '@pureadmin/descriptions@1.2.1(element-plus@2.9.9(vue@3.5.13(typescript@5.8.3)))(typescript@5.8.3)':
     dependencies:
       '@element-plus/icons-vue': 2.3.1(vue@3.5.13(typescript@5.8.3))
-      '@pureadmin/utils': 2.6.0(echarts@5.6.0)(vue@3.5.13(typescript@5.8.3))
+      '@pureadmin/utils': 2.6.0(vue@3.5.13(typescript@5.8.3))
       element-plus: 2.9.9(vue@3.5.13(typescript@5.8.3))
       vue: 3.5.13(typescript@5.8.3)
     transitivePeerDependencies:
-      - echarts
       - typescript
 
   '@pureadmin/table@3.2.1(element-plus@2.9.9(vue@3.5.13(typescript@5.8.3)))(typescript@5.8.3)':
@@ -4717,6 +4725,10 @@ snapshots:
   '@pureadmin/utils@2.6.0(echarts@5.6.0)(vue@3.5.13(typescript@5.8.3))':
     optionalDependencies:
       echarts: 5.6.0
+      vue: 3.5.13(typescript@5.8.3)
+
+  '@pureadmin/utils@2.6.0(vue@3.5.13(typescript@5.8.3))':
+    optionalDependencies:
       vue: 3.5.13(typescript@5.8.3)
 
   '@rollup/pluginutils@5.1.4(rollup@4.40.2)':
@@ -7301,6 +7313,11 @@ snapshots:
     dependencies:
       stylelint: 16.19.1(typescript@5.8.3)
       stylelint-config-recommended: 14.0.1(stylelint@16.19.1(typescript@5.8.3))
+
+  stylelint-config-standard@38.0.0(stylelint@16.19.1(typescript@5.8.3)):
+    dependencies:
+      stylelint: 16.19.1(typescript@5.8.3)
+      stylelint-config-recommended: 16.0.0(stylelint@16.19.1(typescript@5.8.3))
 
   stylelint-order@6.0.4(stylelint@16.19.1(typescript@5.8.3)):
     dependencies:
