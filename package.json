@@ -69,6 +69,7 @@
     "qs": "^6.14.0",
     "responsive-storage": "^2.2.0",
     "sortablejs": "^1.15.6",
+    "stylelint-config-html": "^1.1.0",
     "stylelint-config-standard": "^38.0.0",
     "typeit": "^8.8.7",
     "vue": "^3.5.13",
