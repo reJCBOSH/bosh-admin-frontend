@@ -53,7 +53,7 @@ const props = {
 export default defineComponent({
   name: "PureTableBar",
   props,
-  emits: ["refresh", "fullscreen"],
+  emits: ["refresh", "size", "fullscreen"],
   setup(props, { emit, slots, attrs }) {
     const size = ref("default");
     const loading = ref(false);
@@ -116,6 +116,11 @@ export default defineComponent({
       toggleRowExpansionAll(props.tableRef.data, isExpandAll.value);
     }
 
+    function onSize(val: string) {
+      size.value = val;
+      emit("size", val);
+    }
+
     function onFullscreen() {
       isFullscreen.value = !isFullscreen.value;
       emit("fullscreen", isFullscreen.value);
@@ -164,19 +169,19 @@ export default defineComponent({
         <el-dropdown-menu class="translation">
           <el-dropdown-item
             style={getDropdownItemStyle.value("large")}
-            onClick={() => (size.value = "large")}
+            onClick={() => onSize("large")}
           >
             宽松
           </el-dropdown-item>
           <el-dropdown-item
             style={getDropdownItemStyle.value("default")}
-            onClick={() => (size.value = "default")}
+            onClick={() => onSize("default")}
           >
             默认
           </el-dropdown-item>
           <el-dropdown-item
             style={getDropdownItemStyle.value("small")}
-            onClick={() => (size.value = "small")}
+            onClick={() => onSize("small")}
           >
             紧凑
           </el-dropdown-item>
