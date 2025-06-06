@@ -254,16 +254,17 @@ export default defineComponent({
             "px-2",
             "pb-2",
             "bg-bg_color",
-            isFullscreen.value
-              ? ["h-full!", "z-2002", "fixed", "inset-0"]
-              : "mt-2"
+            "rounded-lg",
+            "border",
+            "border-[var(--pure-border-color)]",
+            isFullscreen.value ? ["h-full!", "z-2002", "fixed", "inset-0"] : ""
           ]}
         >
-          <div class="flex justify-between w-full h-[60px] p-4">
+          <div class="flex justify-between w-full h-[60px] px-2 py-4">
             {slots?.title ? (
               slots.title()
             ) : (
-              <p class="font-bold truncate">{props.title}</p>
+              <p class="flex items-center font-bold truncate">{props.title}</p>
             )}
             <div class="flex items-center justify-around">
               {slots?.buttons ? (
