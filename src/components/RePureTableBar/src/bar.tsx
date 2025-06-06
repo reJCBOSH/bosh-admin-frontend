@@ -17,6 +17,8 @@ import {
   getKeyList
 } from "@pureadmin/utils";
 
+import Search from "~icons/tabler/search";
+import SearchOff from "~icons/tabler/search-off";
 import Fullscreen from "~icons/ri/fullscreen-fill";
 import ExitFullscreen from "~icons/ri/fullscreen-exit-fill";
 import DragIcon from "@/assets/table-bar/drag.svg?component";
@@ -53,11 +55,12 @@ const props = {
 export default defineComponent({
   name: "PureTableBar",
   props,
-  emits: ["refresh", "size", "fullscreen"],
+  emits: ["refresh", "searchOff", "size", "fullscreen"],
   setup(props, { emit, slots, attrs }) {
     const size = ref("default");
     const loading = ref(false);
     const checkAll = ref(true);
+    const isSearchOff = ref(false);
     const isFullscreen = ref(false);
     const isIndeterminate = ref(false);
     const instance = getCurrentInstance()!;
@@ -114,6 +117,11 @@ export default defineComponent({
     function onExpand() {
       isExpandAll.value = !isExpandAll.value;
       toggleRowExpansionAll(props.tableRef.data, isExpandAll.value);
+    }
+
+    function onSearchOff() {
+      isSearchOff.value = !isSearchOff.value;
+      emit("searchOff", isSearchOff.value);
     }
 
     function onSize(val: string) {
@@ -298,6 +306,13 @@ export default defineComponent({
                 ]}
                 v-tippy={rendTippyProps("刷新")}
                 onClick={() => onReFresh()}
+              />
+              <el-divider direction="vertical" />
+              <iconifyIconOffline
+                class={["w-[16px]", iconClass.value]}
+                icon={isSearchOff.value ? Search : SearchOff}
+                v-tippy={isSearchOff.value ? "打开搜索" : "隐藏搜索"}
+                onClick={() => onSearchOff()}
               />
               <el-divider direction="vertical" />
               <el-dropdown
