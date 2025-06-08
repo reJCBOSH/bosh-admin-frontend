@@ -80,7 +80,8 @@ class PureHttp {
               const data = getToken();
               if (data) {
                 const now = new Date().getTime();
-                const expired = parseInt(data.expires) - now <= 0;
+                // 提前5秒刷新，防止前端请求时access token未过期，到后端access token过期的情况
+                const expired = parseInt(data.expires) - now <= 5000;
                 if (expired) {
                   if (!PureHttp.isRefreshing) {
                     PureHttp.isRefreshing = true;
