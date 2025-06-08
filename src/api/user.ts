@@ -17,9 +17,10 @@ export type UserResult = {
     accessToken: string;
     /** 用于调用刷新`accessToken`的接口时所需的`token` */
     refreshToken: string;
-    /** `accessToken`的过期时间（格式'xxxx/xx/xx xx:xx:xx'） */
-    expires: Date;
+    /** `accessToken`的过期时间（时间戳） */
+    expires: number;
   };
+  msg: string;
 };
 
 export type RefreshTokenResult = {
@@ -29,9 +30,10 @@ export type RefreshTokenResult = {
     accessToken: string;
     /** 用于调用刷新`accessToken`的接口时所需的`token` */
     refreshToken: string;
-    /** `accessToken`的过期时间（格式'xxxx/xx/xx xx:xx:xx'） */
-    expires: Date;
+    /** `accessToken`的过期时间（时间戳） */
+    expires: number;
   };
+  msg: string;
 };
 
 /** 登录 */
@@ -41,5 +43,5 @@ export const getLogin = (data?: object) => {
 
 /** 刷新`token` */
 export const refreshTokenApi = (data?: object) => {
-  return http.request<RefreshTokenResult>("post", "/refresh-token", { data });
+  return http.request<RefreshTokenResult>("post", "/refreshToken", { data });
 };
