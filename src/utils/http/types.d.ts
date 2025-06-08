@@ -9,6 +9,23 @@ export type resultType = {
   accessToken?: string;
 };
 
+// CommonResult 公共返回结果
+export type CommonResult = {
+  success: boolean;
+  data?: any;
+  msg: string;
+};
+
+// ListResult 列表数据返回结果
+export type ListResult = {
+  success: boolean;
+  data?: {
+    list: Array<any>;
+    total?: number;
+  };
+  msg: string;
+};
+
 export type RequestMethods = Extract<
   Method,
   "get" | "post" | "put" | "delete" | "patch" | "option" | "head"
