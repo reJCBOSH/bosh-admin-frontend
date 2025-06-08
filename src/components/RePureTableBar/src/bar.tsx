@@ -17,6 +17,8 @@ import {
   getKeyList
 } from "@pureadmin/utils";
 
+import Search from "~icons/tabler/search";
+import SearchOff from "~icons/tabler/search-off";
 import Fullscreen from "~icons/ri/fullscreen-fill";
 import ExitFullscreen from "~icons/ri/fullscreen-exit-fill";
 import DragIcon from "@/assets/table-bar/drag.svg?component";
@@ -47,17 +49,23 @@ const props = {
   tableKey: {
     type: [String, Number] as PropType<string | number>,
     default: "0"
+  },
+  /**  控制扩展功能，默认打开刷新、列展示、全屏 */
+  extends: {
+    type: Array as PropType<string[]>,
+    default: () => ["refresh", "dynamic", "fullscreen"]
   }
 };
 
 export default defineComponent({
   name: "PureTableBar",
   props,
-  emits: ["refresh", "fullscreen"],
+  emits: ["refresh", "searchOff", "size", "fullscreen"],
   setup(props, { emit, slots, attrs }) {
     const size = ref("default");
     const loading = ref(false);
     const checkAll = ref(true);
+    const isSearchOff = ref(false);
     const isFullscreen = ref(false);
     const isIndeterminate = ref(false);
     const instance = getCurrentInstance()!;
@@ -105,6 +113,10 @@ export default defineComponent({
       ];
     });
 
+    function extendOn(extendName: string) {
+      return props.extends.includes(extendName);
+    }
+
     function onReFresh() {
       loading.value = true;
       emit("refresh");
@@ -114,6 +126,16 @@ export default defineComponent({
     function onExpand() {
       isExpandAll.value = !isExpandAll.value;
       toggleRowExpansionAll(props.tableRef.data, isExpandAll.value);
+    }
+
+    function onSearchOff() {
+      isSearchOff.value = !isSearchOff.value;
+      emit("searchOff", isSearchOff.value);
+    }
+
+    function onSize(val: string) {
+      size.value = val;
+      emit("size", val);
     }
 
     function onFullscreen() {
@@ -164,19 +186,19 @@ export default defineComponent({
         <el-dropdown-menu class="translation">
           <el-dropdown-item
             style={getDropdownItemStyle.value("large")}
-            onClick={() => (size.value = "large")}
+            onClick={() => onSize("large")}
           >
             宽松
           </el-dropdown-item>
           <el-dropdown-item
             style={getDropdownItemStyle.value("default")}
-            onClick={() => (size.value = "default")}
+            onClick={() => onSize("default")}
           >
             默认
           </el-dropdown-item>
           <el-dropdown-item
             style={getDropdownItemStyle.value("small")}
-            onClick={() => (size.value = "small")}
+            onClick={() => onSize("small")}
           >
             紧凑
           </el-dropdown-item>
@@ -254,132 +276,184 @@ export default defineComponent({
             "px-2",
             "pb-2",
             "bg-bg_color",
-            isFullscreen.value
-              ? ["h-full!", "z-2002", "fixed", "inset-0"]
-              : "mt-2"
+            "rounded-lg",
+            "border",
+            "border-[var(--pure-border-color)]",
+            isFullscreen.value ? ["h-full!", "z-2002", "fixed", "inset-0"] : ""
           ]}
         >
-          <div class="flex justify-between w-full h-[60px] p-4">
+          <div class="flex justify-between w-full h-[60px] px-2 py-4">
             {slots?.title ? (
               slots.title()
             ) : (
-              <p class="font-bold truncate">{props.title}</p>
+              <p class="flex items-center font-bold truncate">{props.title}</p>
             )}
             <div class="flex items-center justify-around">
               {slots?.buttons ? (
                 <div class="flex mr-4">{slots.buttons()}</div>
               ) : null}
-              {props.tableRef?.size ? (
-                <>
-                  <ExpandIcon
-                    class={["w-[16px]", iconClass.value]}
-                    style={{
-                      transform: isExpandAll.value ? "none" : "rotate(-90deg)"
-                    }}
-                    v-tippy={rendTippyProps(
-                      isExpandAll.value ? "折叠" : "展开"
-                    )}
-                    onClick={() => onExpand()}
-                  />
-                  <el-divider direction="vertical" />
-                </>
-              ) : null}
-              <RefreshIcon
-                class={[
-                  "w-[16px]",
-                  iconClass.value,
-                  loading.value ? "animate-spin" : ""
-                ]}
-                v-tippy={rendTippyProps("刷新")}
-                onClick={() => onReFresh()}
-              />
-              <el-divider direction="vertical" />
-              <el-dropdown
-                v-slots={dropdown}
-                trigger="click"
-                v-tippy={rendTippyProps("密度")}
-              >
-                <CollapseIcon class={["w-[16px]", iconClass.value]} />
-              </el-dropdown>
-              <el-divider direction="vertical" />
 
-              <el-popover
-                v-slots={reference}
-                placement="bottom-start"
-                popper-style={{ padding: 0 }}
-                width="200"
-                trigger="click"
-              >
-                <div class={[topClass.value]}>
-                  <el-checkbox
-                    class="-mr-1!"
-                    label="列展示"
-                    v-model={checkAll.value}
-                    indeterminate={isIndeterminate.value}
-                    onChange={value => handleCheckAllChange(value)}
-                  />
-                  <el-button type="primary" link onClick={() => onReset()}>
-                    重置
-                  </el-button>
-                </div>
+              <el-breadcrumb separator="|" class="flex items-center">
+                {props.tableRef?.size ? (
+                  <>
+                    <el-breadcrumb-item>
+                      <ExpandIcon
+                        class={["w-[16px]", iconClass.value]}
+                        style={{
+                          transform: isExpandAll.value
+                            ? "none"
+                            : "rotate(-90deg)"
+                        }}
+                        v-tippy={rendTippyProps(
+                          isExpandAll.value ? "折叠" : "展开"
+                        )}
+                        onClick={() => onExpand()}
+                      />
+                    </el-breadcrumb-item>
+                  </>
+                ) : null}
 
-                <div class="pt-[6px] pl-[11px]">
-                  <el-scrollbar max-height="36vh">
-                    <el-checkbox-group
-                      ref={`GroupRef${unref(props.tableKey)}`}
-                      modelValue={checkedColumns.value}
-                      onChange={value => handleCheckedColumnsChange(value)}
-                    >
-                      <el-space
-                        direction="vertical"
-                        alignment="flex-start"
-                        size={0}
+                {extendOn("refresh") ? (
+                  <>
+                    <el-breadcrumb-item>
+                      <RefreshIcon
+                        class={[
+                          "w-[16px]",
+                          iconClass.value,
+                          loading.value ? "animate-spin" : ""
+                        ]}
+                        v-tippy={rendTippyProps("刷新")}
+                        onClick={() => onReFresh()}
+                      />
+                    </el-breadcrumb-item>
+                  </>
+                ) : null}
+
+                {extendOn("searchOff") ? (
+                  <>
+                    <el-breadcrumb-item>
+                      <iconifyIconOffline
+                        class={["w-[16px]", iconClass.value]}
+                        icon={isSearchOff.value ? Search : SearchOff}
+                        v-tippy={isSearchOff.value ? "打开搜索" : "隐藏搜索"}
+                        onClick={() => onSearchOff()}
+                      />
+                    </el-breadcrumb-item>
+                  </>
+                ) : null}
+
+                {extendOn("size") ? (
+                  <>
+                    <el-breadcrumb-item>
+                      <el-dropdown
+                        v-slots={dropdown}
+                        trigger="click"
+                        v-tippy={rendTippyProps("密度")}
                       >
-                        {checkColumnList.map((item, index) => {
-                          return (
-                            <div class="flex items-center">
-                              <DragIcon
-                                class={[
-                                  "drag-btn w-[16px] mr-2",
-                                  isFixedColumn(item)
-                                    ? "cursor-no-drop!"
-                                    : "cursor-grab!"
-                                ]}
-                                onMouseenter={(event: {
-                                  preventDefault: () => void;
-                                }) => rowDrop(event)}
-                              />
-                              <el-checkbox
-                                key={index}
-                                label={item}
-                                value={item}
-                                onChange={value =>
-                                  handleCheckColumnListChange(value, item)
-                                }
-                              >
-                                <span
-                                  title={item}
-                                  class="inline-block w-[120px] truncate hover:text-text_color_primary"
-                                >
-                                  {item}
-                                </span>
-                              </el-checkbox>
-                            </div>
-                          );
-                        })}
-                      </el-space>
-                    </el-checkbox-group>
-                  </el-scrollbar>
-                </div>
-              </el-popover>
-              <el-divider direction="vertical" />
+                        <CollapseIcon class={["w-[16px]", iconClass.value]} />
+                      </el-dropdown>
+                    </el-breadcrumb-item>
+                  </>
+                ) : null}
 
-              <iconifyIconOffline
-                class={["w-[16px]", iconClass.value]}
-                icon={isFullscreen.value ? ExitFullscreen : Fullscreen}
-                v-tippy={isFullscreen.value ? "退出全屏" : "全屏"}
-                onClick={() => onFullscreen()}
-              />
+                {extendOn("dynamic") ? (
+                  <>
+                    <el-breadcrumb-item>
+                      <el-popover
+                        v-slots={reference}
+                        placement="bottom-start"
+                        popper-style={{ padding: 0 }}
+                        width="200"
+                        trigger="click"
+                      >
+                        <div class={[topClass.value]}>
+                          <el-checkbox
+                            class="-mr-1!"
+                            label="列展示"
+                            v-model={checkAll.value}
+                            indeterminate={isIndeterminate.value}
+                            onChange={value => handleCheckAllChange(value)}
+                          />
+                          <el-button
+                            type="primary"
+                            link
+                            onClick={() => onReset()}
+                          >
+                            重置
+                          </el-button>
+                        </div>
+
+                        <div class="pt-[6px] pl-[11px]">
+                          <el-scrollbar max-height="36vh">
+                            <el-checkbox-group
+                              ref={`GroupRef${unref(props.tableKey)}`}
+                              modelValue={checkedColumns.value}
+                              onChange={value =>
+                                handleCheckedColumnsChange(value)
+                              }
+                            >
+                              <el-space
+                                direction="vertical"
+                                alignment="flex-start"
+                                size={0}
+                              >
+                                {checkColumnList.map((item, index) => {
+                                  return (
+                                    <div class="flex items-center">
+                                      <DragIcon
+                                        class={[
+                                          "drag-btn w-[16px] mr-2",
+                                          isFixedColumn(item)
+                                            ? "cursor-no-drop!"
+                                            : "cursor-grab!"
+                                        ]}
+                                        onMouseenter={(event: {
+                                          preventDefault: () => void;
+                                        }) => rowDrop(event)}
+                                      />
+                                      <el-checkbox
+                                        key={index}
+                                        label={item}
+                                        value={item}
+                                        onChange={value =>
+                                          handleCheckColumnListChange(
+                                            value,
+                                            item
+                                          )
+                                        }
+                                      >
+                                        <span
+                                          title={item}
+                                          class="inline-block w-[120px] truncate hover:text-text_color_primary"
+                                        >
+                                          {item}
+                                        </span>
+                                      </el-checkbox>
+                                    </div>
+                                  );
+                                })}
+                              </el-space>
+                            </el-checkbox-group>
+                          </el-scrollbar>
+                        </div>
+                      </el-popover>
+                    </el-breadcrumb-item>
+                  </>
+                ) : null}
+
+                {extendOn("fullscreen") ? (
+                  <>
+                    <el-breadcrumb-item>
+                      <iconifyIconOffline
+                        class={["w-[16px]", iconClass.value]}
+                        icon={isFullscreen.value ? ExitFullscreen : Fullscreen}
+                        v-tippy={isFullscreen.value ? "退出全屏" : "全屏"}
+                        onClick={() => onFullscreen()}
+                      />
+                    </el-breadcrumb-item>
+                  </>
+                ) : null}
+              </el-breadcrumb>
             </div>
           </div>
           {slots.default({

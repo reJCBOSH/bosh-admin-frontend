@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PlusSearch, PlusColumn, FieldValues } from "plus-pro-components";
-import { PropType } from "vue";
+import { PropType, ref, watch } from "vue";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { ButtonProps } from "element-plus";
 import "plus-pro-components/es/components/search/style/css";
@@ -59,16 +59,38 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["search", "buttonClick"]);
+let actualShowNum = ref(3);
+let isUnfold = ref(false);
 
-const handleReset = () => {
+const emit = defineEmits(["search", "unfold", "buttonClick"]);
+
+function onReset() {
   state.value = props.defaultParams;
   emit("search");
-};
+}
+
+function onUnfold() {
+  isUnfold.value = !isUnfold.value;
+  if (isUnfold.value) {
+    actualShowNum.value = props.searchColumns.length;
+  } else {
+    actualShowNum.value = props.showNumber;
+  }
+  emit("unfold");
+}
+
+watch(props, v => {
+  actualShowNum.value = v.showNumber;
+  if (v.hasUnfold && v.showNumber < v.searchColumns.length) {
+    isUnfold.value = false;
+  }
+});
 </script>
 
 <template>
-  <div class="p-4 bg-bg_color rounded-lg">
+  <div
+    class="p-4 bg-bg_color rounded-lg border border-[var(--pure-border-color)]"
+  >
     <PlusSearch
       v-model="state"
       class="mr-[-10px]"
@@ -85,7 +107,7 @@ const handleReset = () => {
       >
         <slot :name="col.slot" v-bind="scope" />
       </template>
-      <template #footer="{ handleUnfold, isShowUnfold }">
+      <template #footer>
         <el-button
           type="primary"
           :icon="useRenderIcon(Search)"
@@ -93,17 +115,17 @@ const handleReset = () => {
         >
           搜索
         </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="handleReset">
+        <el-button :icon="useRenderIcon(Refresh)" @click="onReset">
           重置
         </el-button>
         <el-button
           v-if="hasUnfold"
           :type="unfoldType != 'button' ? 'primary' : ''"
           :link="unfoldType != 'button'"
-          :icon="isShowUnfold ? ArrowUp : ArrowDown"
-          @click="handleUnfold"
+          :icon="isUnfold ? ArrowUp : ArrowDown"
+          @click="onUnfold"
         >
-          {{ isShowUnfold ? "收起" : "展开" }}
+          {{ isUnfold ? "收起" : "展开" }}
         </el-button>
         <slot name="extra-buttons">
           <el-button
