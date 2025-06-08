@@ -13,6 +13,7 @@ import { stringify } from "qs";
 import NProgress from "../progress";
 import { getToken, formatToken } from "@/utils/auth";
 import { useUserStoreHook } from "@/store/modules/user";
+import { message } from "../message";
 
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
@@ -140,6 +141,51 @@ class PureHttp {
         $error.isCancelRequest = Axios.isCancel($error);
         // 关闭进度条动画
         NProgress.done();
+        // 响应错误
+        if ($error && $error.response) {
+          switch ($error.response.status) {
+            case 400:
+              message("请求错误(400)", { type: "error" });
+              break;
+            case 401:
+              message("未授权，请重新登录(401)", { type: "error" });
+              useUserStoreHook().logOut();
+              break;
+            case 403:
+              message("拒绝访问(403)", { type: "error" });
+              break;
+            case 404:
+              message("请求出错(404)", { type: "error" });
+              break;
+            case 408:
+              message("请求超时(408)", { type: "error" });
+              break;
+            case 500:
+              message("服务器错误(500)", { type: "error" });
+              break;
+            case 501:
+              message("服务未实现(501)", { type: "error" });
+              break;
+            case 502:
+              message("网络错误(502)", { type: "error" });
+              break;
+            case 503:
+              message("服务不可用(503)", { type: "error" });
+              break;
+            case 504:
+              message("网络超时(504)", { type: "error" });
+              break;
+            case 505:
+              message("HTTP版本不受支持(505)", { type: "error" });
+              break;
+            default:
+              message("连接出错(" + $error.response.status + ")", {
+                type: "error"
+              });
+          }
+        } else {
+          message("连接服务器失败", { type: "error" });
+        }
         // 所有的响应异常 区分来源为取消请求/非取消请求
         return Promise.reject($error);
       }
