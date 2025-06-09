@@ -3,11 +3,11 @@ import Motion from "./utils/motion";
 import { useRouter } from "vue-router";
 import { message } from "@/utils/message";
 import { loginRules } from "./utils/rule";
-import { ref, reactive, toRaw } from "vue";
+import { ref, reactive, toRaw, onMounted } from "vue";
 import { debounce } from "@pureadmin/utils";
 import { useNav } from "@/layout/hooks/useNav";
 import { useEventListener } from "@vueuse/core";
-import type { FormInstance } from "element-plus";
+import { ElNotification, type FormInstance } from "element-plus";
 import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
 import { initRouter, getTopMenu } from "@/router/utils";
@@ -15,11 +15,13 @@ import { bg, avatar, illustration } from "./utils/static";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 import TypeIt from "@/components/ReTypeit";
+import { captchaApi } from "@/api/basic";
 
 import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
 import Lock from "~icons/ri/lock-fill";
 import User from "~icons/ri/user-3-fill";
+import KeyHole from "~icons/ri/shield-keyhole-line";
 
 defineOptions({
   name: "Login"
@@ -37,9 +39,29 @@ const { dataTheme, overallStyle, dataThemeChange } = useDataThemeChange();
 dataThemeChange(overallStyle.value);
 const { title } = useNav();
 
+let picPath = ref("");
+let captchaLength = ref(6);
+
+const getCaptcha = debounce(
+  async () => {
+    const res = await captchaApi();
+    if (res.success) {
+      picPath.value = res.data.picPath;
+      captchaLength.value = res.data.captchaLength;
+      ruleForm.captchaId = res.data.captchaId;
+    } else {
+      message(res.msg, { type: "error" });
+    }
+  },
+  1000,
+  true
+);
+
 const ruleForm = reactive({
-  username: "admin",
-  password: "admin123"
+  username: "",
+  password: "",
+  captcha: "",
+  captchaId: ""
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
@@ -48,24 +70,29 @@ const onLogin = async (formEl: FormInstance | undefined) => {
     if (valid) {
       loading.value = true;
       useUserStoreHook()
-        .loginByUsername({
-          username: ruleForm.username,
-          password: ruleForm.password
-        })
+        .loginByUsername(ruleForm)
         .then(res => {
           if (res.success) {
+            const userInfo = res.data;
             // 获取后端路由
             return initRouter().then(() => {
               disabled.value = true;
               router
                 .push(getTopMenu(true).path)
                 .then(() => {
-                  message("登录成功", { type: "success" });
+                  ElNotification({
+                    title: "你好，" + userInfo.nickname,
+                    message: "欢迎回来",
+                    icon: useRenderIcon("noto:party-popper"),
+                    duration: 2000,
+                    offset: 30
+                  });
                 })
                 .finally(() => (disabled.value = false));
             });
           } else {
             message("登录失败", { type: "error" });
+            getCaptcha();
           }
         })
         .finally(() => (loading.value = false));
@@ -86,6 +113,10 @@ useEventListener(document, "keydown", ({ code }) => {
     !loading.value
   )
     immediateDebounce(ruleFormRef.value);
+});
+
+onMounted(() => {
+  getCaptcha();
 });
 </script>
 
@@ -124,20 +155,11 @@ useEventListener(document, "keydown", ({ code }) => {
             size="large"
           >
             <Motion :delay="100">
-              <el-form-item
-                :rules="[
-                  {
-                    required: true,
-                    message: '请输入账号',
-                    trigger: 'blur'
-                  }
-                ]"
-                prop="username"
-              >
+              <el-form-item prop="username">
                 <el-input
                   v-model="ruleForm.username"
                   clearable
-                  placeholder="账号"
+                  placeholder="用户名"
                   :prefix-icon="useRenderIcon(User)"
                 />
               </el-form-item>
@@ -152,6 +174,30 @@ useEventListener(document, "keydown", ({ code }) => {
                   placeholder="密码"
                   :prefix-icon="useRenderIcon(Lock)"
                 />
+              </el-form-item>
+            </Motion>
+
+            <Motion :delay="200">
+              <el-form-item prop="captcha">
+                <el-input
+                  v-model="ruleForm.captcha"
+                  clearable
+                  placeholder="验证码"
+                  :prefix-icon="useRenderIcon(KeyHole)"
+                  :maxlength="captchaLength"
+                  :minlength="captchaLength"
+                >
+                  <template v-slot:append>
+                    <div class="w-[120px] h-[40px]">
+                      <img
+                        v-if="picPath"
+                        :src="picPath"
+                        alt="请输入验证码"
+                        @click="getCaptcha"
+                      />
+                    </div>
+                  </template>
+                </el-input>
               </el-form-item>
             </Motion>
 
