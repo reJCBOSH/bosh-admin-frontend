@@ -4,3 +4,4 @@ import type { SearchColumn, ExtraButton } from "./src/index.vue";
 
 export type { SearchColumn, ExtraButton };
 export const SearchBar = withInstall(searchBar);
+export default SearchBar;
