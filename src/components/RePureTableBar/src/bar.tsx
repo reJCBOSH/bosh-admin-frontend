@@ -107,8 +107,8 @@ export default defineComponent({
         "pt-[3px]",
         "px-[11px]",
         "border-b-[1px]",
-        "border-solid",
-        "border-[#dcdfe6]",
+        // "border-solid",
+        // "border-[#dcdfe6]",
         "dark:border-[#303030]"
       ];
     });
@@ -273,8 +273,7 @@ export default defineComponent({
           {...attrs}
           class={[
             "w-full",
-            "px-2",
-            "pb-2",
+            "px-4",
             "bg-bg_color",
             "rounded-lg",
             "border",
