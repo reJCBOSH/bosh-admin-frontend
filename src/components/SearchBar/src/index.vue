@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PlusSearch, PlusColumn, FieldValues } from "plus-pro-components";
+import { PlusSearch, PlusColumn } from "plus-pro-components";
 import { PropType, ref, watch } from "vue";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { ButtonProps } from "element-plus";
@@ -21,8 +21,6 @@ export interface ExtraButton extends Partial<ButtonProps> {
   key: string;
   label?: string;
 }
-
-const state = defineModel<FieldValues>();
 
 const props = defineProps({
   searchColumns: {
@@ -62,11 +60,20 @@ const props = defineProps({
 let actualShowNum = ref(3);
 let isUnfold = ref(false);
 
-const emit = defineEmits(["search", "unfold", "buttonClick"]);
+const emit = defineEmits(["search", "reset", "unfold", "buttonClick"]);
 
+const localState = ref({ ...props.defaultParams });
+
+const getSlotName = (col: SearchColumn) => {
+  return `plus-field-${col.slot}`;
+};
+
+function onSearch() {
+  emit("search", localState.value);
+}
 function onReset() {
-  state.value = props.defaultParams;
-  emit("search");
+  localState.value = { ...props.defaultParams };
+  emit("reset");
 }
 
 function onUnfold() {
@@ -92,7 +99,7 @@ watch(props, v => {
     class="p-4 bg-bg_color rounded-lg border border-[var(--pure-border-color)]"
   >
     <PlusSearch
-      v-model="state"
+      v-model="localState"
       class="mr-[-10px]"
       :columns="searchColumns"
       :label-width="labelWidth"
@@ -101,17 +108,14 @@ watch(props, v => {
       :default-values="defaultParams"
       :has-unfold="hasUnfold"
     >
-      <template
-        v-for="col in searchColumns"
-        #[`plus-field-${col.slot}`]="scope"
-      >
+      <template v-for="col in searchColumns" #[getSlotName(col)]="scope">
         <slot :name="col.slot" v-bind="scope" />
       </template>
       <template #footer>
         <el-button
           type="primary"
           :icon="useRenderIcon(Search)"
-          @click="$emit('search')"
+          @click="onSearch"
         >
           搜索
         </el-button>
