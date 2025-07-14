@@ -1,5 +1,6 @@
 import { http } from "@/utils/http";
 import { baseApi } from "./utils";
+import type { CommonResult, ListResult } from "@/utils/http/types";
 
 export type UserResult = {
   success: boolean;
@@ -50,5 +51,48 @@ export const refreshTokenApi = (data?: object) => {
     "post",
     baseApi("/api/basic/refreshToken"),
     { data }
+  );
+};
+
+export const getUserList = (params?: object) => {
+  return http.GET<ListResult>(baseApi("/api/sysUser/getList"), params);
+};
+
+export const getUserInfo = (params?: object) => {
+  return http.GET<CommonResult>(baseApi("/api/sysUser/getInfo"), params);
+};
+
+export const addUser = (data?: object) => {
+  return http.POST<CommonResult>(baseApi("/api/sysUser/add"), data);
+};
+
+export const editUser = (data?: object) => {
+  return http.POST<CommonResult>(baseApi("/api/sysUser/edit"), data);
+};
+
+export const delUser = (data?: object) => {
+  return http.POST<CommonResult>(baseApi("/api/sysUser/del"), data);
+};
+
+export const setUserStatus = (data?: object) => {
+  return http.POST<CommonResult>(baseApi("/api/sysUser/setStatus"), data);
+};
+
+export const resetUserPassword = (data?: object) => {
+  return http.POST<CommonResult>(baseApi("/api/sysUser/resetPassword"), data);
+};
+
+export const getSelfInfo = () => {
+  return http.GET<CommonResult>(baseApi("/api/sysUser/getSelfInfo"));
+};
+
+export const editSelfInfo = (data?: object) => {
+  return http.POST<CommonResult>(baseApi("/api/sysUser/editSelfInfo"), data);
+};
+
+export const editSelfPassword = (data?: object) => {
+  return http.POST<CommonResult>(
+    baseApi("/api/sysUser/editSelfPassword"),
+    data
   );
 };
