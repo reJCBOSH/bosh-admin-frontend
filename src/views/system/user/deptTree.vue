@@ -87,25 +87,16 @@ defineExpose({ onTreeReset });
 <template>
   <div
     v-loading="treeLoading"
-    class="h-full bg-bg_color overflow-auto"
+    class="h-full bg-bg_color overflow-auto rounded-lg"
     :style="{ minHeight: `calc(100vh - 141px)` }"
   >
-    <div class="flex items-center h-[34px] my-1">
+    <div class="flex items-center h-[34px] my-2">
       <el-input
         v-model="searchValue"
         class="ml-2"
         placeholder="请输入部门名称"
         clearable
-      >
-        <template #suffix>
-          <el-icon class="el-input__icon">
-            <IconifyIconOffline
-              v-show="searchValue.length === 0"
-              icon="ri:search-line"
-            />
-          </el-icon>
-        </template>
-      </el-input>
+      />
       <el-dropdown :hide-on-click="false">
         <IconifyIconOffline
           class="w-[28px] cursor-pointer"

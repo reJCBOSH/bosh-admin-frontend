@@ -48,17 +48,18 @@ const {
   <div :class="['flex', 'justify-between', deviceDetection() && 'flex-wrap']">
     <dept-tree
       ref="treeRef"
-      :class="['mr-2', deviceDetection() ? 'w-full' : 'min-w-[200px]']"
+      :class="['mr-4', deviceDetection() ? 'w-full' : 'min-w-[300px]']"
       :treeData="treeData"
       :treeLoading="treeLoading"
       @tree-select="onTreeSelect"
     />
     <div
       :class="[
-        deviceDetection() ? ['w-full', 'mt-2'] : 'w-[calc(100%-200px-0.5rem)]'
+        deviceDetection() ? ['w-full', 'mt-2'] : 'w-[calc(100%-300px-0.5rem)]'
       ]"
     >
       <SearchBar
+        class="mb-4"
         :search-columns="searchColumns"
         @search="handleSearch"
         @reset="handleReset"
@@ -177,9 +178,5 @@ const {
 
 :deep(.el-button:focus-visible) {
   outline: none;
-}
-
-.main-content {
-  margin: 24px 24px 0 !important;
 }
 </style>
