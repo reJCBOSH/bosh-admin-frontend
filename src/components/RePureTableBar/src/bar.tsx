@@ -50,10 +50,10 @@ const props = {
     type: [String, Number] as PropType<string | number>,
     default: "0"
   },
-  /**  控制扩展功能，默认打开刷新、列展示、全屏 */
+  /**  控制扩展功能，默认打开刷新、列展示 */
   extends: {
     type: Array as PropType<string[]>,
-    default: () => ["refresh", "dynamic", "fullscreen"]
+    default: () => ["refresh", "dynamic"]
   }
 };
 
