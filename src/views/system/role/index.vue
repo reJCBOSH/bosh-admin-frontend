@@ -10,6 +10,8 @@ import {
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import SearchBar from "@/components/SearchBar";
 import { PureTableBar } from "@/components/RePureTableBar";
+import MenuAuth from "./menuAuth.vue";
+import DataAuth from "./dataAuth.vue";
 
 import Plus from "~icons/ep/plus";
 import Delete from "~icons/ep/delete";
@@ -67,6 +69,7 @@ onMounted(() => {
 <template>
   <div>
     <SearchBar
+      class="mb-4"
       :search-columns="searchColumns"
       @search="handleSearch"
       @reset="handleReset"
@@ -203,7 +206,7 @@ onMounted(() => {
 
       <div
         v-if="menuAuthVisible"
-        class="!min-w-[calc(100vw-60vw-268px)] mt-2 px-2 pb-2 bg-bg_color ml-2 overflow-auto"
+        class="!min-w-[calc(100vw-60vw-268px)] px-4 pb-4 bg-bg_color ml-4 overflow-auto rounded-lg"
       >
         <MenuAuth
           :row="curRow"
@@ -215,7 +218,7 @@ onMounted(() => {
 
       <div
         v-if="dataAuthVisible"
-        class="!min-w-[calc(100vw-60vw-268px)] mt-2 px-2 pb-2 bg-bg_color ml-2 overflow-auto"
+        class="!min-w-[calc(100vw-60vw-268px)] px-4 pb-4 bg-bg_color ml-4 overflow-auto rounded-lg"
       >
         <DataAuth
           :row="curRow"
