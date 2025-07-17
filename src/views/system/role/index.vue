@@ -112,7 +112,6 @@ onMounted(() => {
             :adaptiveConfig="{ offsetBottom: 108 }"
             :data="dataList"
             :columns="dynamicColumns"
-            stripe
             :pagination="pagination"
             :paginationSmall="size === 'small' ? true : false"
             :header-cell-style="{

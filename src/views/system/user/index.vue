@@ -101,7 +101,6 @@ const {
             :size="size"
             :data="dataList"
             :columns="dynamicColumns"
-            stripe
             :pagination="pagination"
             :paginationSmall="size === 'small' ? true : false"
             :header-cell-style="{
