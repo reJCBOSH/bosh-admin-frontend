@@ -13,3 +13,28 @@ export const delLoginRecord = (data: object) => {
 export const batchDelLoginRecord = (data: object) => {
   return http.POST<CommonResult>(baseApi("/api/sysLoginRecord/batchDel"), data);
 };
+
+export const getOperationRecordList = (params: any) => {
+  return http.GET<ListResult>(
+    baseApi("/api/sysOperationRecord/getList"),
+    params
+  );
+};
+
+export const getOperationRecordInfo = (data: object) => {
+  return http.GET<CommonResult>(
+    baseApi("/api/sysOperationRecord/getInfo"),
+    data
+  );
+};
+
+export const delOperationRecord = (data?: object) => {
+  return http.POST<CommonResult>(baseApi("/api/sysOperationRecord/del"), data);
+};
+
+export const batchDelOperationRecord = (data?: object) => {
+  return http.POST<CommonResult>(
+    baseApi("/api/sysOperationRecord/batchDel"),
+    data
+  );
+};

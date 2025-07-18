@@ -121,7 +121,7 @@ export function useMenu() {
     loading.value = true;
     const res = await getMenuList({ pageNo: -1 });
     if (res.success) {
-      let newData = res.data.list;
+      let newData = res.data.list || [];
       treeList.value = handleTree(cloneDeep(newData), "id", "parentId");
       if (!isAllEmpty(queryParams.value.title)) {
         newData = newData.filter(item =>

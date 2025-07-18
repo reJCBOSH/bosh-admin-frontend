@@ -76,7 +76,7 @@ export function useLoginRecord(tableRef: Ref) {
     params.pageSize = pagination.pageSize;
     const res = await getLoginRecordList(params);
     if (res.success) {
-      dataList.value = res.data.list;
+      dataList.value = res.data.list || [];
       pagination.total = res.data.total;
       setTimeout(() => {
         loading.value = false;

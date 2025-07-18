@@ -61,7 +61,7 @@ export function useDept() {
     loading.value = true;
     const res = await getDeptList({ pageNo: -1 });
     if (res.success) {
-      let newData = res.data.list;
+      let newData = res.data.list || [];
       treeList.value = handleTree(cloneDeep(newData), "id", "parentId");
       if (!isAllEmpty(queryParams.value.deptName)) {
         newData = newData.filter(item =>
