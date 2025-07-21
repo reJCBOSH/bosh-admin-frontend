@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useDept } from "./hooks";
-import SearchBar from "@/components/SearchBar";
+import { SearchBar } from "@/components/SearchBar";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
@@ -16,6 +16,7 @@ const tableRef = ref();
 const {
   loading,
   searchColumns,
+  queryParams,
   columns,
   dataList,
   getDataList,
@@ -35,7 +36,8 @@ onMounted(() => {
   <div>
     <SearchBar
       class="mb-4"
-      :search-columns="searchColumns"
+      :model-value="queryParams"
+      :columns="searchColumns"
       @search="handleSearch"
       @reset="handleReset"
     />

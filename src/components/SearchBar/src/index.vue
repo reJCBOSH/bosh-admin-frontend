@@ -1,97 +1,72 @@
 <script setup lang="ts">
 import { PlusSearch, PlusColumn } from "plus-pro-components";
-import { PropType, ref, watch } from "vue";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { ButtonProps } from "element-plus";
+import { computed, useSlots } from "vue";
 import "plus-pro-components/es/components/search/style/css";
-
-import Search from "~icons/ep/search";
-import Refresh from "~icons/ep/refresh";
-import ArrowUp from "~icons/ep/arrow-up";
-import ArrowDown from "~icons/ep/arrow-down";
 
 defineOptions({
   name: "SearchBar"
 });
 
-export interface SearchColumn extends PlusColumn {
-  slot?: string;
-}
-export interface ExtraButton extends Partial<ButtonProps> {
-  key: string;
-  label?: string;
-}
+export interface SearchColumn extends PlusColumn {}
 
 const props = defineProps({
-  searchColumns: {
-    type: Array<SearchColumn>,
+  modelValue: {
+    type: Object,
+    required: true
+  },
+  columns: {
+    type: Array as () => SearchColumn[],
     default: () => []
-  },
-  labelWidth: {
-    type: [Number, String],
-    default: "auto"
-  },
-  labelPosition: {
-    type: String as PropType<"left" | "right" | "top">,
-    default: "left"
   },
   showNumber: {
     type: Number,
-    default: 3
-  },
-  defaultParams: {
-    type: Object,
-    default: () => ({})
-  },
-  hasUnfold: {
-    type: Boolean,
-    default: false
-  },
-  unfoldType: {
-    type: String as PropType<"button" | "link">,
-    default: "link"
-  },
-  extraButtons: {
-    type: Array<ExtraButton>,
-    default: () => []
+    default: 5
   }
 });
 
-let actualShowNum = ref(3);
-let isUnfold = ref(false);
+const emit = defineEmits(["update:modelValue", "change", "search", "reset"]);
 
-const emit = defineEmits(["search", "reset", "unfold", "buttonClick"]);
+// 使用计算属性实现双向绑定
+const localState = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit("update:modelValue", value);
+  }
+});
 
-const localState = ref({ ...props.defaultParams });
+const slots = useSlots();
 
-const getSlotName = (col: SearchColumn) => {
-  return `plus-field-${col.slot}`;
-};
+// 处理columns，将prop映射为正确的插槽名
+const searchColumns = computed(() => {
+  return props.columns.map(column => {
+    const newColumn = { ...column };
 
-function onSearch() {
-  emit("search", localState.value);
+    // 如果用户使用了prop字段名作为插槽
+    if (slots[column.prop]) {
+      newColumn.slots = {
+        ...(column.slots || {}),
+        default: `plus-field-${column.prop}`
+      };
+    }
+
+    return newColumn;
+  });
+});
+
+function handleChange(values: any) {
+  emit("update:modelValue", values);
+  emit("change", values);
 }
-function onReset() {
-  localState.value = { ...props.defaultParams };
+
+function handleSearch(values: any) {
+  emit("search", values);
+}
+
+function handleReset() {
   emit("reset");
 }
-
-function onUnfold() {
-  isUnfold.value = !isUnfold.value;
-  if (isUnfold.value) {
-    actualShowNum.value = props.searchColumns.length;
-  } else {
-    actualShowNum.value = props.showNumber;
-  }
-  emit("unfold");
-}
-
-watch(props, v => {
-  actualShowNum.value = v.showNumber;
-  if (v.hasUnfold && v.showNumber < v.searchColumns.length) {
-    isUnfold.value = false;
-  }
-});
 </script>
 
 <template>
@@ -100,63 +75,23 @@ watch(props, v => {
   >
     <PlusSearch
       v-model="localState"
-      class="mr-[-10px]"
       :columns="searchColumns"
-      :label-width="labelWidth"
-      :label-position="labelPosition"
       :show-number="showNumber"
-      :default-values="defaultParams"
-      :has-unfold="hasUnfold"
+      v-bind="$attrs"
+      class="mr-[-10px] mb-0!"
+      @change="handleChange"
+      @search="handleSearch"
+      @reset="handleReset"
     >
-      <template v-for="col in searchColumns" #[getSlotName(col)]="scope">
-        <slot :name="col.slot" v-bind="scope" />
-      </template>
-      <template #footer>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Search)"
-          @click="onSearch"
-        >
-          搜索
-        </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="onReset">
-          重置
-        </el-button>
-        <el-button
-          v-if="hasUnfold"
-          :type="unfoldType != 'button' ? 'primary' : ''"
-          :link="unfoldType != 'button'"
-          :icon="isUnfold ? ArrowUp : ArrowDown"
-          @click="onUnfold"
-        >
-          {{ isUnfold ? "收起" : "展开" }}
-        </el-button>
-        <slot name="extra-buttons">
-          <el-button
-            v-for="(item, index) in extraButtons"
-            :key="index"
-            :size="item.size ? item.size : ''"
-            :type="item.type ? item.type : ''"
-            :plain="item?.plain ?? false"
-            :text="item?.text ?? false"
-            :bg="item?.bg ?? false"
-            :link="item?.link ?? false"
-            :round="item?.round ?? false"
-            :circle="item?.circle ?? false"
-            :loading="item?.loading ?? false"
-            :disabled="item?.disabled ?? false"
-            :icon="item.icon ? useRenderIcon(item.icon) : null"
-            :autofocus="item?.autofocus ?? false"
-            :native-type="item?.nativeType ?? 'button'"
-            :auto-insert-space="item?.autoInsertSpace ?? false"
-            :color="item?.color ?? ''"
-            :dark="item?.dark ?? false"
-            :tag="item?.tag ?? 'button'"
-            @click="$emit('buttonClick', item.key)"
-          >
-            {{ item.label }}
-          </el-button>
-        </slot>
+      <!-- 动态处理所有插槽 -->
+      <template v-for="(_, slotName) in $slots" #[slotName]="scope">
+        <template v-if="String(slotName).startsWith('plus-field-')">
+          <slot :name="slotName" v-bind="scope" />
+        </template>
+        <template v-else>
+          <!-- 自动将prop名转换为plus-field-前缀 -->
+          <slot :name="`plus-field-${slotName}`" v-bind="scope" />
+        </template>
       </template>
     </PlusSearch>
   </div>
@@ -165,6 +100,10 @@ watch(props, v => {
 <style lang="scss" scoped>
 :deep(.plus-form-item .plus-form-item__label) {
   color: var(--el-text-color-primary);
+}
+
+:deep(.el-link__inner) {
+  color: var(--el-color-primary);
 }
 
 :deep(.plus-search .plus-search__button__wrapper .el-form-item) {

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import SearchBar from "@/components/SearchBar";
 import { deviceDetection } from "@pureadmin/utils";
 import { useUser } from "./hooks";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import deptTree from "./deptTree.vue";
+import { SearchBar } from "@/components/SearchBar";
 
 import Delete from "~icons/ep/delete";
 import EditPen from "~icons/ep/edit-pen";
@@ -60,11 +60,13 @@ const {
     >
       <SearchBar
         class="mb-4"
-        :search-columns="searchColumns"
+        :model-value="queryParams"
+        :columns="searchColumns"
+        :show-number="6"
         @search="handleSearch"
         @reset="handleReset"
       >
-        <template #roleId>
+        <template #plus-field-roleId>
           <el-select
             v-model="queryParams.roleId"
             placeholder="请选择角色"
@@ -79,6 +81,7 @@ const {
           </el-select>
         </template>
       </SearchBar>
+
       <PureTableBar title="用户管理" :columns="columns" @refresh="getDataList">
         <template #buttons>
           <el-button

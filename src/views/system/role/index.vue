@@ -8,7 +8,7 @@ import {
   deviceDetection
 } from "@pureadmin/utils";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import SearchBar from "@/components/SearchBar";
+import { SearchBar } from "@/components/SearchBar";
 import { PureTableBar } from "@/components/RePureTableBar";
 import MenuAuth from "./menuAuth.vue";
 import DataAuth from "./dataAuth.vue";
@@ -31,6 +31,7 @@ const treeHeight = ref();
 const {
   loading,
   searchColumns,
+  queryParams,
   pagination,
   columns,
   dataList,
@@ -70,7 +71,8 @@ onMounted(() => {
   <div>
     <SearchBar
       class="mb-4"
-      :search-columns="searchColumns"
+      :model-value="queryParams"
+      :columns="searchColumns"
       @search="handleSearch"
       @reset="handleReset"
     />

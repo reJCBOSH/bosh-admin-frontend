@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useLoginRecord } from "./hooks";
-import SearchBar from "@/components/SearchBar";
+import { SearchBar } from "@/components/SearchBar";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
@@ -15,6 +15,7 @@ const tableRef = ref();
 
 const {
   loading,
+  queryParams,
   searchColumns,
   pagination,
   columns,
@@ -37,7 +38,8 @@ const {
   <div>
     <SearchBar
       class="mb-4"
-      :search-columns="searchColumns"
+      :model-value="queryParams"
+      :columns="searchColumns"
       @search="handleSearch"
       @reset="handleReset"
     />

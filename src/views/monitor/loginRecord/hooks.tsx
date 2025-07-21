@@ -156,8 +156,8 @@ export function useLoginRecord(tableRef: Ref) {
 
   return {
     loading,
-    searchColumns,
     queryParams,
+    searchColumns,
     pagination,
     columns,
     dataList,

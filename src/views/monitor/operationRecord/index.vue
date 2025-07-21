@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useOperationRecord } from "./hooks";
-import SearchBar from "@/components/SearchBar";
+import { SearchBar } from "@/components/SearchBar";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import "vue-json-pretty/lib/styles.css";
@@ -17,6 +17,7 @@ defineOptions({
 const {
   tableRef,
   loading,
+  queryParams,
   searchColumns,
   pagination,
   columns,
@@ -47,7 +48,8 @@ onMounted(() => {
   <div>
     <SearchBar
       class="mb-4"
-      :searchColumns="searchColumns"
+      :model-value="queryParams"
+      :columns="searchColumns"
       @search="handleSearch"
       @reset="handleReset"
     />

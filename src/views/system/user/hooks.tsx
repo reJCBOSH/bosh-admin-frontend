@@ -1,4 +1,3 @@
-import type { SearchColumn } from "@/components/SearchBar";
 import type { PaginationProps } from "@pureadmin/table";
 import { h, onMounted, reactive, ref } from "vue";
 import { usePublicHooks } from "../hooks";
@@ -17,6 +16,7 @@ import { cloneDeep, deviceDetection, handleTree } from "@pureadmin/utils";
 import userForm from "./userForm.vue";
 import { getDeptList } from "@/api/dept";
 import { getRoleList } from "@/api/role";
+import type { SearchColumn } from "@/components/SearchBar";
 
 export function useUser() {
   const { switchStyle } = usePublicHooks();
@@ -38,8 +38,7 @@ export function useUser() {
     },
     {
       label: "角色",
-      prop: "roleId",
-      slot: "roleId"
+      prop: "roleId"
     },
     { label: "联系方式", prop: "mobile" },
     {
