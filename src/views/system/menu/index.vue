@@ -62,7 +62,6 @@ const {
           :adaptiveConfig="{ offsetBottom: 40 }"
           align-whole="center"
           row-key="id"
-          showOverflowTooltip
           table-layout="auto"
           :loading="loading"
           :size="size"

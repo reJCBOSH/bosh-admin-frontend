@@ -64,7 +64,6 @@ onMounted(() => {
           :adaptiveConfig="{ offsetBottom: 40 }"
           align-whole="center"
           row-key="id"
-          showOverflowTooltip
           table-layout="auto"
           default-expand-all
           :loading="loading"

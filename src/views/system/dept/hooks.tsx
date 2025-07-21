@@ -37,7 +37,7 @@ export function useDept() {
     }
   ];
   const columns: TableColumnList = [
-    { label: "部门名称", prop: "deptName", align: "left" },
+    { label: "部门名称", prop: "deptName", align: "left", minWidth: 150 },
     { label: "部门编码", prop: "deptCode" },
     {
       label: "状态",
@@ -51,7 +51,7 @@ export function useDept() {
     { label: "显示顺序", prop: "displayOrder" },
     { label: "备注", prop: "remark" },
     { label: "创建时间", prop: "createdAt", width: 160 },
-    { label: "操作", width: 200, fixed: "right", slot: "operation" }
+    { label: "操作", width: 220, fixed: "right", slot: "operation" }
   ];
   const treeList = ref([]);
   const dataList = ref([]);

@@ -105,8 +105,8 @@ onMounted(() => {
           <PureTable
             ref="tableRef"
             align-whole="center"
-            showOverflowTooltip
             table-layout="auto"
+            row-key="id"
             :loading="loading"
             :size="size"
             adaptive
