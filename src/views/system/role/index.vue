@@ -124,7 +124,7 @@ onMounted(() => {
             @page-current-change="currentPageChange"
           >
             <template #operation="{ row }">
-              <div v-if="row.role_code !== 'superAdmin'">
+              <div v-if="row.roleCode !== 'SuperAdmin'">
                 <el-button
                   class="reset-margin"
                   link
@@ -200,6 +200,7 @@ onMounted(() => {
                   </template>
                 </el-dropdown>
               </div>
+              <div v-else class="cursor-not-allowed">超级管理员</div>
             </template>
           </PureTable>
         </template>

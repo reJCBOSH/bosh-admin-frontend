@@ -24,7 +24,7 @@ const treeProps = {
 const treeIds = ref([]);
 const treeData = ref([]);
 const treeSearchValue = ref();
-const isLinkage = ref(false);
+const isLinkage = ref(true);
 const isExpandAll = ref(false);
 const isSelectAll = ref(false);
 

@@ -54,7 +54,7 @@ export function useRole() {
       cellRenderer: scope => (
         <el-switch
           size={scope.props.size === "small" ? "small" : "default"}
-          disabled={scope.row.role_code === "superAdmin"}
+          disabled={scope.row.roleCode === "SuperAdmin"}
           loading={switchLoadMap.value[scope.index]?.loading}
           v-model={scope.row.status}
           active-value={1}
