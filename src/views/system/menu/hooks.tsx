@@ -51,7 +51,7 @@ export function useMenu() {
     {
       label: "菜单名称",
       prop: "title",
-      minWidth: 200,
+      width: 200,
       align: "left",
       cellRenderer: ({ row }) => (
         <>
@@ -81,19 +81,21 @@ export function useMenu() {
     {
       label: "路由路径",
       prop: "path",
-      minWidth: 160
+      width: 160,
+      showOverflowTooltip: true
     },
     {
       label: "组件路径",
       prop: "component",
-      minWidth: 160,
+      width: 160,
+      showOverflowTooltip: true,
       formatter: ({ path, component }) =>
         isAllEmpty(component) ? path : component
     },
     {
       label: "权限标识",
       prop: "authCode",
-      width: 120
+      minWidth: 140
     },
     {
       label: "显示顺序",
@@ -109,7 +111,7 @@ export function useMenu() {
     {
       label: "操作",
       fixed: "right",
-      width: 220,
+      width: 250,
       slot: "operation"
     }
   ];

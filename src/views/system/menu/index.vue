@@ -48,6 +48,7 @@ const {
     >
       <template #buttons>
         <el-button
+          v-auth="'sysMenu:add'"
           type="primary"
           :icon="useRenderIcon(Plus)"
           @click="handleAdd"
@@ -74,6 +75,7 @@ const {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="'sysMenu:edit'"
               class="reset-margin"
               link
               type="primary"
@@ -85,6 +87,7 @@ const {
             </el-button>
             <el-button
               v-show="row.menuType !== 3"
+              v-auth="'sysMenu:add'"
               class="reset-margin"
               link
               type="primary"
@@ -95,6 +98,7 @@ const {
               新增
             </el-button>
             <el-button
+              v-auth="'sysMenu:del'"
               class="reset-margin"
               link
               type="danger"

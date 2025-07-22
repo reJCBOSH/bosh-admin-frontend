@@ -12,6 +12,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { PureTableBar } from "@/components/RePureTableBar";
 import MenuAuth from "./menuAuth.vue";
 import DataAuth from "./dataAuth.vue";
+import { hasAuth } from "@/router/utils";
 
 import Plus from "~icons/ep/plus";
 import Delete from "~icons/ep/delete";
@@ -19,6 +20,7 @@ import EditPen from "~icons/ep/edit-pen";
 import Menu from "~icons/ep/menu";
 import More from "~icons/ep/more";
 import Database from "~icons/ri/database-2-fill";
+import { usePublicHooks } from "../hooks";
 
 defineOptions({
   name: "SystemRole"
@@ -35,6 +37,7 @@ const {
   pagination,
   columns,
   dataList,
+  switchLoadMap,
   curRow,
   menuAuthVisible,
   dataAuthVisible,
@@ -45,6 +48,7 @@ const {
   handleReset,
   pageSizeChange,
   currentPageChange,
+  switchStatus,
   handleAdd,
   handleEdit,
   handleDel,
@@ -53,6 +57,8 @@ const {
   showDataAuth,
   closeDataAuth
 } = useRole();
+
+const { switchStyle } = usePublicHooks();
 
 onMounted(() => {
   getDataList();
@@ -94,6 +100,7 @@ onMounted(() => {
       >
         <template #buttons>
           <el-button
+            v-auth="'sysRole:add'"
             type="primary"
             :icon="useRenderIcon(Plus)"
             @click="handleAdd"
@@ -123,9 +130,32 @@ onMounted(() => {
             @page-size-change="pageSizeChange"
             @page-current-change="currentPageChange"
           >
+            <template #status="{ row, index }">
+              <el-switch
+                v-if="hasAuth('sysRole:status')"
+                v-model="row.status"
+                :size="size === 'small' ? 'small' : 'default'"
+                :disabled="row.roleCode === 'SuperAdmin'"
+                :loading="switchLoadMap[index]?.loading"
+                :active-value="1"
+                :inactive-value="0"
+                active-text="启用"
+                inactive-text="停用"
+                inline-prompt
+                :style="switchStyle"
+                @change="() => switchStatus({ row, index })"
+              />
+              <span v-else>
+                <el-tag v-if="row.status === 1" type="success" effect="dark">
+                  启用
+                </el-tag>
+                <el-tag v-else type="danger" effect="dark">停用</el-tag>
+              </span>
+            </template>
             <template #operation="{ row }">
               <div v-if="row.roleCode !== 'SuperAdmin'">
                 <el-button
+                  v-auth="'sysRole:edit'"
                   class="reset-margin"
                   link
                   type="primary"
@@ -141,6 +171,7 @@ onMounted(() => {
                 >
                   <template #reference>
                     <el-button
+                      v-auth="'sysRole:del'"
                       class="reset-margin"
                       link
                       type="danger"
@@ -153,6 +184,9 @@ onMounted(() => {
                 </el-popconfirm>
                 <el-dropdown class="ml-3">
                   <el-button
+                    v-if="
+                      hasAuth('sysRole:menuAuth') || hasAuth('sysRole:dataAuth')
+                    "
                     class="mt-[2px]"
                     link
                     type="primary"
@@ -161,7 +195,7 @@ onMounted(() => {
                   />
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item>
+                      <el-dropdown-item v-if="hasAuth('sysRole:menuAuth')">
                         <el-button
                           class="reset-margin"
                           link
@@ -173,7 +207,7 @@ onMounted(() => {
                           菜单权限
                         </el-button>
                       </el-dropdown-item>
-                      <el-dropdown-item>
+                      <el-dropdown-item v-if="hasAuth('sysRole:dataAuth')">
                         <el-button
                           class="reset-margin"
                           link

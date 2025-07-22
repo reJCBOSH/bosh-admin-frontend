@@ -6,12 +6,14 @@ import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import deptTree from "./deptTree.vue";
 import { SearchBar } from "@/components/SearchBar";
+import { hasAuth } from "@/router/utils";
 
 import Delete from "~icons/ep/delete";
 import EditPen from "~icons/ep/edit-pen";
 import Plus from "~icons/ep/plus";
 import Password from "~icons/ri/lock-password-line";
 import More from "~icons/ep/more-filled";
+import { usePublicHooks } from "../hooks";
 
 defineOptions({
   name: "SystemUser"
@@ -30,6 +32,7 @@ const {
   higherRoleOptions,
   treeData,
   treeLoading,
+  switchLoadMap,
 
   getDataList,
   handleSearch,
@@ -40,8 +43,11 @@ const {
   handleAdd,
   handleEdit,
   handleDel,
-  resetPassword
+  resetPassword,
+  switchStatus
 } = useUser();
+
+const { switchStyle } = usePublicHooks();
 </script>
 
 <template>
@@ -85,6 +91,7 @@ const {
       <PureTableBar title="用户管理" :columns="columns" @refresh="getDataList">
         <template #buttons>
           <el-button
+            v-auth="'sysUser:add'"
             type="primary"
             :icon="useRenderIcon(Plus)"
             @click="handleAdd()"
@@ -113,8 +120,30 @@ const {
             @page-size-change="pageSizeChange"
             @page-current-change="currentPageChange"
           >
+            <template #status="{ row, index }">
+              <el-switch
+                v-if="hasAuth('sysUser:status')"
+                v-model="row.status"
+                :size="size === 'small' ? 'small' : 'default'"
+                :loading="switchLoadMap[index]?.loading"
+                :active-value="1"
+                :inactive-value="0"
+                active-text="正常"
+                inactive-text="冻结"
+                inline-prompt
+                :style="switchStyle"
+                @change="() => switchStatus({ row, index })"
+              />
+              <span v-else>
+                <el-tag v-if="row.status === 1" type="success" effect="dark">
+                  正常
+                </el-tag>
+                <el-tag v-else type="danger" effect="dark">冻结</el-tag>
+              </span>
+            </template>
             <template #operation="{ row }">
               <el-button
+                v-auth="'sysUser:edit'"
                 class="reset-margin"
                 link
                 type="primary"
@@ -130,6 +159,7 @@ const {
               >
                 <template #reference>
                   <el-button
+                    v-auth="'sysUser:del'"
                     class="reset-margin"
                     link
                     type="danger"
@@ -142,6 +172,7 @@ const {
               </el-popconfirm>
               <el-dropdown class="ml-3">
                 <el-button
+                  v-auth="'sysUser:resetPassword'"
                   class="mt-[2px]"
                   link
                   type="primary"

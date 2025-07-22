@@ -8,9 +8,15 @@ import { ElMessage } from "element-plus";
 import Close from "~icons/ep/close";
 import Check from "~icons/ep/check";
 
-const props = withDefaults(defineProps<{ row?: any; treeHeight?: any }>(), {
-  row: null,
-  treeHeight: undefined
+const props = defineProps({
+  row: {
+    type: Object,
+    default: null
+  },
+  treeHeight: {
+    type: Number,
+    default: undefined
+  }
 });
 
 const { iconClass } = useRole();
@@ -24,7 +30,7 @@ const treeProps = {
 const treeIds = ref([]);
 const treeData = ref([]);
 const treeSearchValue = ref();
-const isLinkage = ref(true);
+const isLinkage = ref(false);
 const isExpandAll = ref(false);
 const isSelectAll = ref(false);
 

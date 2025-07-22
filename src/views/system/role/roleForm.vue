@@ -3,11 +3,16 @@ import { computed, ref } from "vue";
 import "plus-pro-components/es/components/form/style/css";
 import { type PlusColumn, PlusForm } from "plus-pro-components";
 
-const props = withDefaults(defineProps<{ info?: any }>(), {
+const props = defineProps({
   info: {
-    roleName: "",
-    roleCode: "",
-    remark: ""
+    type: Object,
+    default: () => {
+      return {
+        roleName: "",
+        roleCode: "",
+        remark: ""
+      };
+    }
   }
 });
 

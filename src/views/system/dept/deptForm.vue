@@ -4,20 +4,25 @@ import "plus-pro-components/es/components/form/style/css";
 import { PlusColumn, PlusForm } from "plus-pro-components";
 import { usePublicHooks } from "../hooks";
 
-const props = withDefaults(
-  defineProps<{ info?: any; higherDeptOptions?: any }>(),
-  {
-    info: {
-      parentId: 0,
-      deptName: "",
-      deptCode: "",
-      status: 1,
-      displayOrder: 0,
-      remark: ""
-    },
-    higherDeptOptions: []
+const props = defineProps({
+  info: {
+    type: Object,
+    default: () => {
+      return {
+        parentId: 0,
+        deptName: "",
+        deptCode: "",
+        status: 1,
+        displayOrder: 0,
+        remark: ""
+      };
+    }
+  },
+  higherDeptOptions: {
+    type: Array<any>,
+    default: () => []
   }
-);
+});
 
 const { switchStyle } = usePublicHooks();
 

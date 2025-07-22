@@ -9,9 +9,15 @@ import { getRoleDeptIds, setRoleDataAuth } from "@/api/role";
 import Close from "~icons/ep/close";
 import Check from "~icons/ep/check";
 
-const props = withDefaults(defineProps<{ row?: any; treeHeight?: any }>(), {
-  row: null,
-  treeHeight: undefined
+const props = defineProps({
+  row: {
+    type: Object,
+    default: null
+  },
+  treeHeight: {
+    type: Number,
+    default: undefined
+  }
 });
 
 const { iconClass, dataAuthOptions } = useRole();

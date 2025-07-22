@@ -1,6 +1,5 @@
 import type { PaginationProps } from "@pureadmin/table";
 import { h, onMounted, reactive, ref } from "vue";
-import { usePublicHooks } from "../hooks";
 import {
   addUser,
   delUser,
@@ -19,7 +18,6 @@ import { getRoleList } from "@/api/role";
 import type { SearchColumn } from "@/components/SearchBar";
 
 export function useUser() {
-  const { switchStyle } = usePublicHooks();
   const switchLoadMap = ref({});
 
   const loading = ref(true);
@@ -94,20 +92,7 @@ export function useUser() {
       label: "状态",
       prop: "status",
       minWidth: 90,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text="正常"
-          inactive-text="冻结"
-          inline-prompt
-          style={switchStyle.value}
-          onChange={() => switchStatus(scope as any)}
-        />
-      )
+      slot: "status"
     },
     { label: "操作", fixed: "right", width: 180, slot: "operation" }
   ];
@@ -346,6 +331,7 @@ export function useUser() {
   });
 
   return {
+    switchLoadMap,
     loading,
     searchColumns,
     queryParams,
@@ -366,6 +352,7 @@ export function useUser() {
     handleAdd,
     handleEdit,
     handleDel,
-    resetPassword
+    resetPassword,
+    switchStatus
   };
 }

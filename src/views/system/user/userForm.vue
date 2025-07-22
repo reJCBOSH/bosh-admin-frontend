@@ -4,28 +4,32 @@ import "plus-pro-components/es/components/form/style/css";
 import { PlusColumn, PlusForm } from "plus-pro-components";
 import { usePublicHooks } from "../hooks";
 
-const props = withDefaults(
-  defineProps<{
-    info?: any;
-    higherDeptOptions?: any;
-    higherRoleOptions?: any;
-  }>(),
-  {
-    info: {
-      username: "",
-      password: "",
-      nickname: "",
-      gender: 0,
-      deptId: undefined,
-      roleId: undefined,
-      mobile: "",
-      status: 1,
-      remark: ""
-    },
-    higherDeptOptions: [],
-    higherRoleOptions: []
+const props = defineProps({
+  info: {
+    type: Object,
+    default: () => {
+      return {
+        username: "",
+        password: "",
+        nickname: "",
+        gender: 0,
+        deptId: undefined,
+        roleId: undefined,
+        mobile: "",
+        status: 1,
+        remark: ""
+      };
+    }
+  },
+  higherDeptOptions: {
+    type: Array<any>,
+    default: () => []
+  },
+  higherRoleOptions: {
+    type: Array<any>,
+    default: () => []
   }
-);
+});
 
 const { switchStyle } = usePublicHooks();
 

@@ -45,30 +45,21 @@ const {
     />
 
     <PureTableBar title="登录日志" :columns="columns" @refresh="getDataList">
-      <template v-slot="{ size, dynamicColumns }">
-        <div
-          v-if="selectedNum > 0"
-          v-motion-fade
-          class="bg-[var(--el-fill-color-light)] w-full h-[46px] mb-2 pl-4 flex items-center"
-        >
-          <div class="flex-auto">
-            <span
-              style="font-size: var(--el-font-size-base)"
-              class="text-[rgba(42,46,54,0.5)] dark:text-[rgba(220,220,242,0.5)]"
+      <template #buttons>
+        <el-popconfirm title="是否确认删除?" @confirm="handleBatchDel">
+          <template #reference>
+            <el-button
+              v-auth="'sysLoginRecord:batchDel'"
+              type="danger"
+              class="mr-1"
+              :disabled="selectedNum === 0"
             >
-              已选 {{ selectedNum }} 项
-            </span>
-            <el-button type="primary" text @click="cancelSelection">
-              取消选择
+              {{ `批量删除(${selectedNum})` }}
             </el-button>
-          </div>
-          <el-popconfirm title="是否确认删除?" @confirm="handleBatchDel">
-            <template #reference>
-              <el-button type="danger" text class="mr-1">批量删除</el-button>
-            </template>
-          </el-popconfirm>
-        </div>
-
+          </template>
+        </el-popconfirm>
+      </template>
+      <template v-slot="{ size, dynamicColumns }">
         <PureTable
           ref="tableRef"
           row-key="id"
@@ -97,6 +88,7 @@ const {
             >
               <template #reference>
                 <el-button
+                  v-auth="'sysLoginRecord:del'"
                   class="reset-margin"
                   link
                   type="danger"

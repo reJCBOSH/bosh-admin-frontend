@@ -5,36 +5,42 @@ import { PlusForm, PlusColumn } from "plus-pro-components";
 import { OptionsType, ReSegmented } from "@/components/ReSegmented";
 import { IconSelect } from "@/components/ReIcon";
 import ReAnimateSelector from "@/components/ReAnimateSelector";
+import { fa } from "element-plus/es/locale/index.mjs";
 
-const props = withDefaults(
-  defineProps<{ info?: any; higherMenuOptions?: any }>(),
-  {
-    info: {
-      menuType: 0,
-      parentId: 0,
-      title: "",
-      name: "",
-      path: "",
-      component: "",
-      displayOrder: 99,
-      redirect: "",
-      icon: "",
-      extraIcon: "",
-      enterTransition: "",
-      leaveTransition: "",
-      activePath: "",
-      authCode: "",
-      frameSrc: "",
-      frameLoading: true,
-      keepAlive: false,
-      hiddenTag: false,
-      fixedTag: false,
-      showLink: true,
-      showParent: false
-    },
-    higherMenuOptions: []
+const props = defineProps({
+  info: {
+    type: Object,
+    default: () => {
+      return {
+        menuType: 0,
+        parentId: 0,
+        title: "",
+        name: "",
+        path: "",
+        component: "",
+        displayOrder: 99,
+        redirect: "",
+        icon: "",
+        extraIcon: "",
+        enterTransition: "",
+        leaveTransition: "",
+        activePath: "",
+        authCode: "",
+        frameSrc: "",
+        frameLoading: false,
+        keepAlive: false,
+        hiddenTag: false,
+        fixedTag: false,
+        showLink: false,
+        showParent: false
+      };
+    }
+  },
+  higherMenuOptions: {
+    type: Array<any>,
+    default: () => []
   }
-);
+});
 
 const rules = {
   title: [{ required: true, message: "请输入菜单名称" }],
@@ -71,7 +77,7 @@ const columns: PlusColumn[] = [
     label: "显示顺序",
     prop: "displayOrder",
     valueType: "input-number",
-    fieldProps: { min: 1, max: 9999, precision: 0 },
+    fieldProps: { min: 0, max: 9999, precision: 0 },
     tooltip: "值越高显示顺序越靠前",
     colProps: { span: 12 }
   },

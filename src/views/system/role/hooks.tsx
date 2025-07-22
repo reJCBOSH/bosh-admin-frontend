@@ -1,5 +1,4 @@
 import { computed, h, reactive, ref } from "vue";
-import { usePublicHooks } from "../hooks";
 import type { SearchColumn } from "@/components/SearchBar";
 import type { PaginationProps } from "@pureadmin/table";
 import {
@@ -16,8 +15,6 @@ import { cloneDeep, deviceDetection } from "@pureadmin/utils";
 import roleForm from "./roleForm.vue";
 
 export function useRole() {
-  const { switchStyle } = usePublicHooks();
-
   const loading = ref(true);
   const searchColumns: SearchColumn[] = [
     { label: "角色名称", prop: "roleName" },
@@ -51,21 +48,7 @@ export function useRole() {
     {
       label: "状态",
       minWidth: 100,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          disabled={scope.row.roleCode === "SuperAdmin"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text="启用"
-          inactive-text="停用"
-          inline-prompt
-          style={switchStyle.value}
-          onChange={() => switchStatus(scope as any)}
-        />
-      )
+      slot: "status"
     },
     { label: "备注", prop: "remark", width: 200 },
     { label: "创建时间", prop: "createdAt", width: 180 },
@@ -289,6 +272,7 @@ export function useRole() {
     pagination,
     columns,
     dataList,
+    switchLoadMap,
     iconClass,
     curRow,
     menuAuthVisible,
@@ -301,6 +285,7 @@ export function useRole() {
     handleReset,
     pageSizeChange,
     currentPageChange,
+    switchStatus,
     handleAdd,
     handleEdit,
     handleDel,

@@ -50,6 +50,7 @@ onMounted(() => {
     >
       <template #buttons>
         <el-button
+          v-auth="'sysDept:add'"
           type="primary"
           :icon="useRenderIcon(Plus)"
           @click="handleAdd"
@@ -77,6 +78,7 @@ onMounted(() => {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="'sysDept:edit'"
               class="reset-margin"
               link
               type="primary"
@@ -87,6 +89,7 @@ onMounted(() => {
               修改
             </el-button>
             <el-button
+              v-auth="'sysDept:add'"
               class="reset-margin"
               link
               type="primary"
@@ -102,6 +105,7 @@ onMounted(() => {
             >
               <template #reference>
                 <el-button
+                  v-auth="'sysDept:del'"
                   class="reset-margin"
                   link
                   type="danger"
