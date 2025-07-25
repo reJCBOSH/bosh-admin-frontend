@@ -126,6 +126,7 @@ const { switchStyle } = usePublicHooks();
                 v-model="row.status"
                 :size="size === 'small' ? 'small' : 'default'"
                 :loading="switchLoadMap[index]?.loading"
+                :disabled="row.roleCode === 'SuperAdmin'"
                 :active-value="1"
                 :inactive-value="0"
                 active-text="正常"
@@ -142,60 +143,63 @@ const { switchStyle } = usePublicHooks();
               </span>
             </template>
             <template #operation="{ row }">
-              <el-button
-                v-auth="'sysUser:edit'"
-                class="reset-margin"
-                link
-                type="primary"
-                :size="size"
-                :icon="useRenderIcon(EditPen)"
-                @click="handleEdit(row)"
-              >
-                修改
-              </el-button>
-              <el-popconfirm
-                :title="`是否确认删除${row.username}?`"
-                @confirm="handleDel(row)"
-              >
-                <template #reference>
-                  <el-button
-                    v-auth="'sysUser:del'"
-                    class="reset-margin"
-                    link
-                    type="danger"
-                    :size="size"
-                    :icon="useRenderIcon(Delete)"
-                  >
-                    删除
-                  </el-button>
-                </template>
-              </el-popconfirm>
-              <el-dropdown class="ml-3">
+              <div v-if="row.roleCode !== 'SuperAdmin'">
                 <el-button
-                  v-auth="'sysUser:resetPassword'"
-                  class="mt-[2px]"
+                  v-auth="'sysUser:edit'"
+                  class="reset-margin"
                   link
                   type="primary"
                   :size="size"
-                  :icon="useRenderIcon(More)"
-                />
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>
-                      <el-button
-                        class="reset-margin more-btn"
-                        link
-                        type="primary"
-                        :size="size"
-                        :icon="useRenderIcon(Password)"
-                        @click="resetPassword(row)"
-                      >
-                        重置密码
-                      </el-button>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+                  :icon="useRenderIcon(EditPen)"
+                  @click="handleEdit(row)"
+                >
+                  修改
+                </el-button>
+                <el-popconfirm
+                  :title="`是否确认删除${row.username}?`"
+                  @confirm="handleDel(row)"
+                >
+                  <template #reference>
+                    <el-button
+                      v-auth="'sysUser:del'"
+                      class="reset-margin"
+                      link
+                      type="danger"
+                      :size="size"
+                      :icon="useRenderIcon(Delete)"
+                    >
+                      删除
+                    </el-button>
+                  </template>
+                </el-popconfirm>
+                <el-dropdown class="ml-3">
+                  <el-button
+                    v-auth="'sysUser:resetPassword'"
+                    class="mt-[2px]"
+                    link
+                    type="primary"
+                    :size="size"
+                    :icon="useRenderIcon(More)"
+                  />
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item>
+                        <el-button
+                          class="reset-margin more-btn"
+                          link
+                          type="primary"
+                          :size="size"
+                          :icon="useRenderIcon(Password)"
+                          @click="resetPassword(row)"
+                        >
+                          重置密码
+                        </el-button>
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
+              <div v-else class="cursor-not-allowed">超级管理员</div>
             </template>
           </PureTable>
         </template>

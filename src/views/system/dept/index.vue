@@ -8,6 +8,7 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import Plus from "~icons/ep/plus";
 import EditPen from "~icons/ep/edit-pen";
 import Delete from "~icons/ep/delete";
+import { hasAuth } from "@/router/utils";
 
 defineOptions({
   name: "SystemDept"
@@ -78,7 +79,7 @@ onMounted(() => {
         >
           <template #operation="{ row }">
             <el-button
-              v-auth="'sysDept:edit'"
+              v-if="row.deptCode !== 'SystemAdmin' && hasAuth('sysDept:edit')"
               class="reset-margin"
               link
               type="primary"
@@ -105,7 +106,9 @@ onMounted(() => {
             >
               <template #reference>
                 <el-button
-                  v-auth="'sysDept:del'"
+                  v-if="
+                    row.deptCode !== 'SystemAdmin' && hasAuth('sysDept:del')
+                  "
                   class="reset-margin"
                   link
                   type="danger"
