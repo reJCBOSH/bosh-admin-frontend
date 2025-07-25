@@ -20,6 +20,11 @@
   margin-left: 2px !important;
 }
 
+/* 重置 el-drawer 中 header 的margin */
+.el-drawer__header {
+  margin-bottom: 0 !important;
+}
+
 /* 自定义 popover 的类名 */
 .pure-popper {
   padding: 0 !important;

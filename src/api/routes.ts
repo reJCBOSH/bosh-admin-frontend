@@ -1,10 +1,10 @@
 import { http } from "@/utils/http";
-
-type Result = {
-  success: boolean;
-  data: Array<any>;
-};
+import type { CommonResult } from "@/utils/http/types";
+import { baseApi } from "./utils";
 
 export const getAsyncRoutes = () => {
-  return http.request<Result>("get", "/get-async-routes");
+  return http.request<CommonResult>(
+    "post",
+    baseApi("/api/sysMenu/getAsyncRoutes")
+  );
 };

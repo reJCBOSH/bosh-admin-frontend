@@ -1,6 +1,5 @@
-import { withInstall } from "@pureadmin/utils";
 import searchBar from "./src/index.vue";
-import type { SearchColumn, ExtraButton } from "./src/index.vue";
+import { withInstall } from "@pureadmin/utils";
 
-export type { SearchColumn, ExtraButton };
 export const SearchBar = withInstall(searchBar);
+export type { SearchColumn } from "./src/index.vue";
