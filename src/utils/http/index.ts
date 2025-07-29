@@ -274,6 +274,19 @@ class PureHttp {
         });
     });
   }
+
+  public UPLOAD<T>(url: string, formData: FormData): Promise<T> {
+    return new Promise((resolve, reject) => {
+      PureHttp.axiosInstance
+        .postForm(url, formData)
+        .then((response: undefined) => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
 }
 
 export const http = new PureHttp();
