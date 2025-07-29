@@ -4,8 +4,6 @@ import "plus-pro-components/es/components/form/style/css";
 import { PlusForm, PlusColumn } from "plus-pro-components";
 import { OptionsType, ReSegmented } from "@/components/ReSegmented";
 import { IconSelect } from "@/components/ReIcon";
-import ReAnimateSelector from "@/components/ReAnimateSelector";
-import { fa } from "element-plus/es/locale/index.mjs";
 
 const props = defineProps({
   info: {
@@ -22,8 +20,6 @@ const props = defineProps({
         redirect: "",
         icon: "",
         extraIcon: "",
-        enterTransition: "",
-        leaveTransition: "",
         activePath: "",
         authCode: "",
         frameSrc: "",
@@ -99,18 +95,6 @@ const columns: PlusColumn[] = [
     prop: "extraIcon",
     fieldProps: { placeholder: "菜单名称右侧的额外图标" },
     hideInForm: computed(() => state.value.menuType === 3),
-    colProps: { span: 12 }
-  },
-  {
-    label: "进场动画",
-    prop: "enterTransition",
-    hideInForm: computed(() => state.value.menuType > 1),
-    colProps: { span: 12 }
-  },
-  {
-    label: "离场动画",
-    prop: "leaveTransition",
-    hideInForm: computed(() => state.value.menuType > 1),
     colProps: { span: 12 }
   },
   {
@@ -269,18 +253,6 @@ defineExpose({ getRef, getState });
     </template>
     <template #plus-field-icon>
       <IconSelect v-model="state.icon" class="w-full" />
-    </template>
-    <template #plus-field-enterTransition>
-      <ReAnimateSelector
-        v-model="state.enterTransition"
-        placeholder="请选择页面进场加载动画"
-      />
-    </template>
-    <template #plus-field-leaveTransition>
-      <ReAnimateSelector
-        v-model="state.leaveTransition"
-        placeholder="请选择页面离场加载动画"
-      />
     </template>
     <template #plus-field-frameLoading>
       <ReSegmented
