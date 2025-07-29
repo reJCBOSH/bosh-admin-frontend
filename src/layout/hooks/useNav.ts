@@ -92,6 +92,11 @@ export function useNav() {
     emitter.emit("openPanel");
   }
 
+  // 跳转个人设置页
+  function toUserSetting() {
+    router.push({ name: "UserSetting" });
+  }
+
   function toggleSideBar() {
     pureApp.toggleSideBar();
   }
@@ -140,6 +145,7 @@ export function useNav() {
     toggle,
     backTopMenu,
     onPanel,
+    toUserSetting,
     getDivStyle,
     changeTitle,
     toggleSideBar,

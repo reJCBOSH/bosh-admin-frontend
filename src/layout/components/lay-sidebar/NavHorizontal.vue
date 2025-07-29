@@ -10,6 +10,7 @@ import { usePermissionStoreHook } from "@/store/modules/permission";
 import LaySidebarItem from "../lay-sidebar/components/SidebarItem.vue";
 import LaySidebarFullScreen from "../lay-sidebar/components/SidebarFullScreen.vue";
 
+import UserSettingLine from "~icons/ri/user-settings-line";
 import LogoutCircleRLine from "~icons/ri/logout-circle-r-line";
 import Setting from "~icons/ri/settings-3-line";
 
@@ -25,6 +26,7 @@ const {
   title,
   logout,
   onPanel,
+  toUserSetting,
   getLogo,
   username,
   userAvatar,
@@ -85,6 +87,10 @@ onMounted(() => {
         </span>
         <template #dropdown>
           <el-dropdown-menu class="logout">
+            <el-dropdown-item @click="toUserSetting">
+              <IconifyIconOffline :icon="UserSettingLine" style="margin: 5px" />
+              个人设置
+            </el-dropdown-item>
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
                 :icon="LogoutCircleRLine"

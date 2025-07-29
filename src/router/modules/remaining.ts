@@ -26,5 +26,15 @@ export default [
         component: () => import("@/layout/redirect.vue")
       }
     ]
+  },
+  {
+    path: "/user-setting",
+    name: "UserSetting",
+    component: () => import("@/views/userSetting/index.vue"),
+    meta: {
+      title: "个人设置",
+      showLink: false,
+      rank: 103
+    }
   }
 ] satisfies Array<RouteConfigsTable>;
