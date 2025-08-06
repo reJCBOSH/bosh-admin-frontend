@@ -124,6 +124,7 @@
       "  }",
       "",
       "  function handleEdit(row: any) {",
+      "    const info = cloneDeep(row);",
       "    open[XXX]Form(\"修改\", row);",
       "  }",
       "",
