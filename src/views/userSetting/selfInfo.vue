@@ -180,7 +180,11 @@ onMounted(() => {
       :model="selfInfo"
     >
       <el-form-item label="头像">
-        <el-avatar :size="80" :src="selfInfo.avatar" />
+        <el-avatar :src="selfInfo.avatar" :size="80" class="!text-3xl">
+          {{
+            selfInfo.avatar ? "" : selfInfo.nickname ? selfInfo.nickname[0] : ""
+          }}
+        </el-avatar>
         <el-upload
           ref="uploadRef"
           accept="image/*"
