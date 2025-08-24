@@ -217,6 +217,7 @@ onMounted(() => {
           type="date"
           :disabled-date="disabledDate"
           style="width: 100%"
+          placeholder="请选择出生日期"
         />
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
@@ -243,9 +244,9 @@ onMounted(() => {
           :autosize="{ minRows: 2 }"
         />
       </el-form-item>
-      <el-button type="primary" @click="handleSubmit(selfInfoFormRef)"
-        >更新信息</el-button
-      >
+      <el-button type="primary" @click="handleSubmit(selfInfoFormRef)">
+        更新信息
+      </el-button>
     </el-form>
     <el-dialog
       v-model="isShow"
