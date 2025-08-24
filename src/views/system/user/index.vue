@@ -7,13 +7,13 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import deptTree from "./deptTree.vue";
 import { SearchBar } from "@/components/SearchBar";
 import { hasAuth } from "@/router/utils";
+import { usePublicHooks } from "../hooks";
 
 import Delete from "~icons/ep/delete";
 import EditPen from "~icons/ep/edit-pen";
 import Plus from "~icons/ep/plus";
 import Password from "~icons/ri/lock-password-line";
 import More from "~icons/ep/more-filled";
-import { usePublicHooks } from "../hooks";
 
 defineOptions({
   name: "SystemUser"

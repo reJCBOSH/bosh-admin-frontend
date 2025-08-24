@@ -93,7 +93,15 @@ onMounted(() => {
           </div>
         </el-menu-item>
         <div class="flex items-center ml-8 mt-4 mb-4">
-          <el-avatar :size="48" :src="userInfo.avatar" />
+          <el-avatar :src="userInfo.avatar" :size="48">
+            {{
+              userInfo.avatar
+                ? ""
+                : userInfo.nickname
+                  ? userInfo.nickname[0]
+                  : "user"
+            }}
+          </el-avatar>
           <div class="ml-4 flex flex-col max-w-[130px]">
             <ReText class="font-bold !self-baseline">
               {{ userInfo.nickname }}
