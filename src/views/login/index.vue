@@ -188,13 +188,8 @@ onMounted(() => {
                   :minlength="captchaLength"
                 >
                   <template v-slot:append>
-                    <div class="w-[120px] h-[40px]">
-                      <img
-                        v-if="picPath"
-                        :src="picPath"
-                        alt="请输入验证码"
-                        @click="getCaptcha"
-                      />
+                    <div class="w-[120px] h-[40px]" @click="getCaptcha">
+                      <img v-if="picPath" :src="picPath" alt="请输入验证码" />
                     </div>
                   </template>
                 </el-input>
