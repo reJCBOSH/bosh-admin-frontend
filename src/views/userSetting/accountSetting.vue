@@ -17,7 +17,7 @@ let changePasswordForm = reactive({
   rePassword: ""
 });
 const REGEXP_PWD =
-  /^.*(?=.{8,16})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*?\.]).*$/;
+  /^(?=.*\d)(?=.*[A-Za-z])(?=.*[!@#$%^&*?\.])[A-Za-z0-9!@#$%^&*?\.]{8,16}$/;
 
 const rules = reactive({
   oldPassword: [{ required: true, message: "请输入旧密码" }],
@@ -111,10 +111,10 @@ const updatePwd = async (formEl: FormInstance) => {
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :destroy-on-close="true"
-      width="40%"
+      :width="600"
     >
       <el-alert
-        title="密码格式：8-16位大写字母、小写字母、数字、特殊字符!@#$%^&*?.的组合"
+        title="密码格式：8-16位字母、数字、特殊字符!@#$%^&*?.的组合"
         type="info"
         :closable="false"
       />
@@ -122,6 +122,7 @@ const updatePwd = async (formEl: FormInstance) => {
         ref="changePasswordFormRef"
         :model="changePasswordForm"
         label-width="auto"
+        label-position="left"
         :rules="rules"
         class="mt-4 px-4"
       >

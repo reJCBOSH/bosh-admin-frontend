@@ -1,9 +1,9 @@
 import { reactive } from "vue";
 import type { FormRules } from "element-plus";
 
-/** 密码正则（密码格式应为8-16位大写字母、小写字母、数字、特殊字符!@#$%^&*?.的组合） */
+/** 密码正则（密码格式应为8-16位字母、数字、特殊字符!@#$%^&*?.的组合） */
 export const REGEXP_PWD =
-  /^.*(?=.{8,16})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*?\.]).*$/;
+  /^(?=.*\d)(?=.*[A-Za-z])(?=.*[!@#$%^&*?\.])[A-Za-z0-9!@#$%^&*?\.]{8,16}$/;
 
 /** 登录校验 */
 const loginRules = reactive<FormRules>({
